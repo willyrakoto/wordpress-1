@@ -25,6 +25,5 @@ COPY docker-entrypoint.sh /entrypoint.sh
 
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
-USER www-data
 CMD ["apache2-foreground"]
-
+USER www-data
