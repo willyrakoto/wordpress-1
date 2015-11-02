@@ -1,6 +1,6 @@
 FROM php:5.6-apache
 
-USER 1001
+USER www-data
 
 RUN a2enmod rewrite
 
