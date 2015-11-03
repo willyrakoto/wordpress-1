@@ -3,6 +3,7 @@ FROM registry.access.redhat.com/openshift3/php-55-rhel7
 ADD ./start.sh /start.sh
 ADD ./foreground.sh /etc/apache2/foreground.sh
 ADD ./supervisord.conf /etc/supervisord.conf
+USER root
 RUN echo %sudo	ALL=NOPASSWD: ALL >> /etc/sudoers
 ADD http://wordpress.org/latest.tar.gz /wordpress.tar.gz
 RUN tar xvzf /wordpress.tar.gz 
@@ -16,3 +17,4 @@ EXPOSE 80
 EXPOSE 22
 
 CMD ["/bin/bash", "/start.sh"]
+USER default
