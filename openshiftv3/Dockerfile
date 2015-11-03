@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/openshift3/php-55-centos7
+FROM openshift/php-55-centos7
 
 USER root
 RUN yum -y update; yum clean all
