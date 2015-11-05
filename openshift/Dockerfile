@@ -31,8 +31,7 @@ COPY docker-entrypoint.sh /entrypoint.sh
 RUN chown www-data:www-data /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
-
+USER 1000190000
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
-USER 1000190000
