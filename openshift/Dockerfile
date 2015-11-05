@@ -23,7 +23,9 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& chown -R www-data:www-data /var/www/html \
 	&& chmod +x /var/www/html \
 	&& chmod +x /var/www \
-	&& chmod +x /usr/src/wordpress
+	&& chmod +x /usr/src/wordpress \
+	&& chmod 666 /usr/src/wordpress \
+	&& chmod 666 /usr/src/wordpress/*
 
 
 COPY docker-entrypoint.sh /entrypoint.sh
