@@ -32,11 +32,13 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& chmod 777 /var/www/html \
 	&& chmod 777 /var/www/html/*
 
-
 COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN chown www-data:www-data /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 # grr, ENTRYPOINT resets CMD now
+USER 1000090000
+RUN useradd -r -g 1000090000 www-data
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
