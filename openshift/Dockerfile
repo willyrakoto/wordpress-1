@@ -18,6 +18,7 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
 	&& tar -xzf wordpress.tar.gz -C /usr/src/ \
 	&& rm wordpress.tar.gz \
+	&& tar cf - --one-file-system -C /usr/src/wordpress /var/www/html/ | tar xf -
 	&& chown -R www-data:www-data /usr/src/wordpress \
 	&& chown -R www-data:www-data /var/www \
 	&& chown -R www-data:www-data /var/www/html \
@@ -35,7 +36,6 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN chown www-data:www-data /entrypoint.sh
-
 RUN chmod +x /entrypoint.sh
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
