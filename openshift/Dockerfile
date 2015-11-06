@@ -38,7 +38,7 @@ RUN chown www-data:www-data /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 # grr, ENTRYPOINT resets CMD now
 USER 1000090000
-RUN useradd -r -g 1000090000 www-data
+RUN useradd -G www-data 1000090000
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
