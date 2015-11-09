@@ -36,6 +36,11 @@ COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN chown 1000090000:1000090000 /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+RUN chown -R 1000090000:1000090000 /var/www/html \
+ && chown -R 1000090000:1000090000 /var/www/html/* \
+ && chmod 777 /var/www/html \
+ && chmod 777 /var/www/html/*
+ 
 # grr, ENTRYPOINT resets CMD now
 USER 1000090000
 
