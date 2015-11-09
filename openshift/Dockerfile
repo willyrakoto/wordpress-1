@@ -19,10 +19,10 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& tar -xzf wordpress.tar.gz -C /usr/src/ \
 	&& rm wordpress.tar.gz \
 	&& tar cf - --one-file-system -C /usr/src/wordpress /var/www/html/ | tar xf - \
-	&& chown -R www-data:www-data /usr/src/wordpress \
-	&& chown -R www-data:www-data /var/www \
-	&& chown -R www-data:www-data /var/www/html \
-	&& chown -R www-data:www-data /var/www/html/* \
+	&& chown -R 1000090000:1000090000 /usr/src/wordpress \
+	&& chown -R 1000090000:1000090000 /var/www \
+	&& chown -R 1000090000:1000090000 /var/www/html \
+	&& chown -R 1000090000:1000090000 /var/www/html/* \
 	&& chmod +x /var/www/html \
 	&& chmod +x /var/www \
 	&& chmod +x /usr/src/wordpress \
@@ -34,11 +34,11 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 
 COPY docker-entrypoint.sh /entrypoint.sh
 
-RUN chown www-data:www-data /entrypoint.sh
+RUN chown 1000090000:1000090000 /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 # grr, ENTRYPOINT resets CMD now
 USER 1000090000
-RUN useradd -G www-data 1000090000
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
+USER 1000090000
