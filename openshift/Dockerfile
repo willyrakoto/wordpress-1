@@ -18,13 +18,17 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
 	&& tar -xzf wordpress.tar.gz -C /usr/src/ \
 	&& rm wordpress.tar.gz \
-	&& chown -R www-data:www-data /usr/src/wordpress
+	&& chown -R www-data:www-data /usr/src/wordpress \
+	
 
 COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh \
-    && sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/ports.conf
+    && sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/ports.conf \
+    && chown -R 1000090000:1000090000 /var/www/html
 EXPOSE 8080
+
+USER 1000090000
 
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
