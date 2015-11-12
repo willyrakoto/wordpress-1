@@ -25,9 +25,12 @@ COPY docker-entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh \
     && sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/ports.conf \
-    && chown -R 1000090000:1000090000 /var/www/html
+    && chown -R 1000090000:1000090000 /var/www/html \
+    && chown -R 1000090000:1000090000 /var/lock/apache2 /var/run/apache2
 EXPOSE 8080
 
+RUN useradd -G www-data 1000090000
+             
 USER 1000090000
 
 # grr, ENTRYPOINT resets CMD now
