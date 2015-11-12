@@ -31,8 +31,6 @@ EXPOSE 8080
 
 RUN useradd -G www-data 1000090000
              
-USER 1000090000
-
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
