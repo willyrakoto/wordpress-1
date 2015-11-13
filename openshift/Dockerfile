@@ -24,6 +24,8 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
         && chown -R 1000080000:www-data /var/www \
         && chown -R 1000080000:www-data /var/www/html
 
+EXPOSE 8080        
+
 COPY docker-entrypoint.sh /entrypoint.sh	
 RUN chmod +x /entrypoint.sh && chown 1000080000:www-data /entrypoint.sh
 # grr, ENTRYPOINT resets CMD now
