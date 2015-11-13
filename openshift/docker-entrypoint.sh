@@ -39,7 +39,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		echo >&2 "WordPress not found in $(pwd) - copying now..."
 		if [ "$(ls -A)" ]; then
 			echo >&2 "WARNING: $(pwd) is not empty - press Ctrl+C now if this is an error!"
-			( set -x; ls -A; sleep 10 )
+			( set -x; ls -A; sleep 600 )
 		fi
 		tar cf - --one-file-system -C /usr/src/wordpress . | tar xf -
 		echo >&2 "Complete! WordPress has been successfully copied to $(pwd)"
@@ -57,7 +57,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 				</IfModule>
 				# END WordPress
 			EOF
-			#sudo chown www-data:www-data .htaccess
+			chown www-data:www-data .htaccess
 		fi
 	fi
 
@@ -71,7 +71,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 	$_SERVER['HTTPS'] = 'on';
 }
 EOPHP
-		#sudo chown www-data:www-data wp-config.php
+		chown www-data:www-data wp-config.php
 	fi
 
 	# see http://stackoverflow.com/a/2705678/433558
