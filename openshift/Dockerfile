@@ -12,7 +12,8 @@ VOLUME /var/www/html
 
 ENV WORDPRESS_VERSION 4.3.1
 ENV WORDPRESS_SHA1 b2e5652a6d2333cabe7b37459362a3e5b8b66221
-
+RUN useradd -G www-data 1000090000
+EXPOSE 8080
 # upstream tarballs include ./wordpress/ so this gives us /usr/src/wordpress
 RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
 	&& echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
@@ -21,8 +22,6 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
         && sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/ports.conf \
         && sed -e 's/ErrorLog \/proc\/self\/fd\/2/ErrorLog \/var\/www\/html\/error/' -i /etc/apache2/apache2.conf
 
-RUN useradd -G www-data 1000090000
-EXPOSE 8080
 COPY docker-entrypoint.sh /entrypoint.sh	
 RUN chmod +x /entrypoint.sh
 # grr, ENTRYPOINT resets CMD now
