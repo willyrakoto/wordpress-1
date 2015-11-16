@@ -21,11 +21,9 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& chown -R www-data:www-data /usr/src/wordpress
 
 COPY docker-entrypoint.sh /entrypoint.sh
-
+RUN chmod +x /entrypoint.sh
 RUN sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/ports.conf
- 
 EXPOSE 8080
-
 RUN sed -e 's/ErrorLog \/proc\/self\/fd\/2/ErrorLog \/var\/www\/html\/error/' -i /etc/apache2/apache2.conf
 
 # grr, ENTRYPOINT resets CMD now
