@@ -33,3 +33,4 @@ EXPOSE 8080
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
+USER 1000110000
