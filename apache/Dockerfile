@@ -25,7 +25,7 @@ COPY docker-entrypoint.sh /entrypoint.sh
 RUN sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/ports.conf
 EXPOSE 8080
 RUN chmod +x /entrypoint.sh
-RUN sed -i 's/ErrorLog .*/ErrorLog \/dev\/stdout/' /etc/apache2/apache2.conf
+RUN sed -i 's/ErrorLog .*/ErrorLog \/tmp\/' /etc/apache2/apache2.conf
 RUN sed -i 's/LogLevel .*/LogLevel info/' /etc/apache2/apache2.conf
 USER 1000110000
 
