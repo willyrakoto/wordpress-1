@@ -27,7 +27,7 @@ EXPOSE 8080
 RUN chmod +x /entrypoint.sh
 COPY errorlog.log /var/www/html/errorlog.log
 RUN chmod +w /var/www/html/errorlog.log
-RUN sed -i 's/ErrorLog .*/ErrorLog \/var\/www\/html\/errorlog.log\//' /etc/apache2/apache2.conf
+RUN sed -i 's/ErrorLog .*/ErrorLog \/var\/www\/html\/errorlog.log/' /etc/apache2/apache2.conf
 RUN sed -i 's/LogLevel .*/LogLevel info/' /etc/apache2/apache2.conf
 USER 1000110000
 
