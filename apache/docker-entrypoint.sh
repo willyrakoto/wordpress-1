@@ -41,7 +41,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			echo >&2 "WARNING: $(pwd) is not empty - press Ctrl+C now if this is an error!"
 			( set -x; ls -A; sleep 100 )
 		fi
-		/usr/bin/sudo tar cf - --one-file-system -C /usr/src/wordpress . | /usr/bin/sudo tar xf -
+		tar cf - --one-file-system -C /usr/src/wordpress . | tar xf -
 		echo >&2 "Complete! WordPress has been successfully copied to $(pwd)"
 		if [ ! -e .htaccess ]; then
 			# NOTE: The "Indexes" option is disabled in the php:apache base image
@@ -57,7 +57,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 				</IfModule>
 				# END WordPress
 			EOF
-			/usr/bin/sudo chown www-data:www-data .htaccess
+			chown www-data:www-data .htaccess
 		fi
 	fi
 
@@ -72,7 +72,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 }
 
 EOPHP
-		/usr/bin/sudo chown www-data:www-data wp-config.php
+		chown www-data:www-data wp-config.php
 	fi
 
 	# see http://stackoverflow.com/a/2705678/433558
