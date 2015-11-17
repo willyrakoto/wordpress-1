@@ -26,8 +26,9 @@ RUN chmod 777 /var/www/html/errorlog.log \
  && sed -i 's/ErrorLog .*/ErrorLog \/var\/www\/html\/errorlog.log/' /etc/apache2/apache2.conf \
  && sed -i 's/LogLevel .*/LogLevel info/' /etc/apache2/apache2.conf
 
-RUN chown 1000110000:1000110000 /var/www \
- && chown 1000110000:1000110000 /var/www/html
+RUN chown 1000110000:1000110000 /var/www
+RUN chown 1000110000:1000110000 /var/www/html
+RUN chmod 777 /var/www/html
 
 COPY docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
