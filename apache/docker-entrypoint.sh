@@ -170,4 +170,4 @@ EOPHP
 fi
 echo >&2 "End of entrypoint and sleep 20 sec"
 sleep 20
-exec "$@"
+#exec "$@"
