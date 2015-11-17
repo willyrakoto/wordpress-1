@@ -34,7 +34,7 @@ RUN chmod 777 /var/www/html
 COPY docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 EXPOSE 8080
-RUN useradd -m 1000110000 && echo "1000110000:1000110000" | chpasswd && adduser 1000110000 sudo
+#RUN useradd -m 1000110000 && echo "1000110000:1000110000" | chpasswd && adduser 1000110000 sudo
 RUN useradd -G www-data 1000110000
 USER 1000110000
 # grr, ENTRYPOINT resets CMD now
