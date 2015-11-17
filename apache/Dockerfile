@@ -24,6 +24,7 @@ COPY errorlog.log /var/www/html/errorlog.log
 RUN chmod 777 /var/www/html/errorlog.log \
  && sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/ports.conf \
  && sed -i 's/ErrorLog .*/ErrorLog \/var\/www\/html\/errorlog.log/' /etc/apache2/apache2.conf \
+ && sed -i 's/CustomLog .*/CustomLog \/var\/www\/html\/errorlog.log combined/' /etc/apache2/apache2.conf \
  && sed -i 's/LogLevel .*/LogLevel info/' /etc/apache2/apache2.conf
 
 RUN chown 1000110000:1000110000 /var/www
