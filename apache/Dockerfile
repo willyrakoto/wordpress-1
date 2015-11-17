@@ -18,7 +18,7 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
 	&& tar -xzf wordpress.tar.gz -C /usr/src/ \
 	&& rm wordpress.tar.gz \
-	&& chown -R 1000100000:1000110000 /usr/src/wordpress
+	&& chown -R 1000110000 :1000110000 /usr/src/wordpress
 
 COPY errorlog.log /var/www/html/errorlog.log
 RUN chmod 777 /var/www/html/errorlog.log \
