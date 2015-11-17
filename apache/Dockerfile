@@ -37,7 +37,8 @@ EXPOSE 8080
 #RUN useradd -m 1000110000 && echo "1000110000:1000110000" | chpasswd && adduser 1000110000 sudo
 RUN useradd -G www-data 1000110000
 #RUN useradd -G root 1000110000
-USER 1000110000
+
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
+USER 1000110000
