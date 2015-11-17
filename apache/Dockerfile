@@ -35,8 +35,6 @@ COPY docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 EXPOSE 8080
 RUN useradd -m 1000110000 && echo "1000110000:1000110000" | chpasswd && adduser 1000110000 sudo
-RUN groupadd 1000110000
-RUN useradd -G 1000110000 1000110000
 RUN useradd -G 1000110000 www-data
 RUN useradd -G www-data 1000110000
 USER 1000110000
