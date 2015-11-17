@@ -39,12 +39,12 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		echo >&2 "WordPress not found in $(pwd) - copying now..."
 		if [ "$(ls -A)" ]; then
 			echo >&2 "WARNING: $(pwd) is not empty - press Ctrl+C now if this is an error!"
-			( set -x; ls -A; sleep 100 )
+			( set -x; ls -A; sleep 60)
 		fi
 		#tar cf - --one-file-system -C /usr/src/wordpress . | tar xf -
 		echo >&2 "Copy files from wordpress to var www html"
 		cp -R /usr/src/wordpress/* .
-		sleep 300
+		sleep 60
 		echo >&2 "Complete! WordPress has been successfully copied to $(pwd)"
 		if [ ! -e .htaccess ]; then
 			echo >&2 "Set rewrite rule in htaccess and pause 20 seconds"
@@ -170,4 +170,4 @@ EOPHP
 fi
 echo >&2 "End of entrypoint and sleep 20 sec"
 sleep 20
-#exec "$@"
+exec "$@"
