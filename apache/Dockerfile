@@ -18,7 +18,7 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
 	&& tar -xzf wordpress.tar.gz -C /usr/src/ \
 	&& rm wordpress.tar.gz \
-	&& chown -R 1000110000:1000110000 /usr/src/wordpress
+	&& chown -R 1000110000:www-data /usr/src/wordpress
 
 COPY errorlog.log /var/www/html/errorlog.log
 RUN chmod 777 /var/www/html/errorlog.log \
@@ -27,8 +27,8 @@ RUN chmod 777 /var/www/html/errorlog.log \
  && sed -i 's/CustomLog .*/CustomLog \/var\/www\/html\/errorlog.log combined/' /etc/apache2/apache2.conf \
  && sed -i 's/LogLevel .*/LogLevel info/' /etc/apache2/apache2.conf
 
-RUN chown 1000110000:1000110000 /var/www
-RUN chown 1000110000:1000110000 /var/www/html
+RUN chown 1000110000:www-data /var/www
+RUN chown 1000110000:www-data /var/www/html
 RUN chmod 777 /var/www/html
 
 COPY docker-entrypoint.sh /entrypoint.sh
@@ -41,4 +41,3 @@ RUN useradd -G www-data 1000110000
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
-USER 1000110000
