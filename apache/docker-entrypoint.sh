@@ -44,11 +44,10 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		#tar cf - --one-file-system -C /usr/src/wordpress . | tar xf -
 		echo >&2 "Copy files from wordpress to var www html"
 		cp -R /usr/src/wordpress/* .
-		sleep 60
 		echo >&2 "Complete! WordPress has been successfully copied to $(pwd)"
 		if [ ! -e .htaccess ]; then
-			echo >&2 "Set rewrite rule in htaccess and pause 20 seconds"
-			sleep 20
+			#echo >&2 "Set rewrite rule in htaccess and pause 20 seconds"
+			#sleep 20
 			# NOTE: The "Indexes" option is disabled in the php:apache base image
 			cat > .htaccess <<-'EOF'
 				# BEGIN WordPress
@@ -63,8 +62,8 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 				# END WordPress
 			EOF
 			chown 1000110000:1000110000 .htaccess
-			echo >&2 "Try to change owner of .htacess and pause 20 seconds"
-			sleep 20
+			#echo >&2 "Try to change owner of .htacess and pause 20 seconds"
+			#sleep 20
 		fi
 	fi
 
@@ -80,8 +79,8 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 
 EOPHP
 		chown 1000110000:1000110000 wp-config.php
-		echo >&2 "Try to change owner of wp-config.php and pause 20 seconds"
-		sleep 20
+		#echo >&2 "Try to change owner of wp-config.php and pause 20 seconds"
+		#sleep 20
 	fi
 
 	# see http://stackoverflow.com/a/2705678/433558
@@ -168,6 +167,6 @@ if (!$mysql->query('CREATE DATABASE IF NOT EXISTS `' . $mysql->real_escape_strin
 $mysql->close();
 EOPHP
 fi
-echo >&2 "End of entrypoint and sleep 20 sec"
-sleep 20
+echo >&2 "End of entrypoint"
+sleep 500
 exec "$@"
