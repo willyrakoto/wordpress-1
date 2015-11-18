@@ -30,6 +30,10 @@ RUN chmod 777 /var/www/html/errorlog.log \
 RUN chown 1000110000:www-data /var/www
 RUN chown 1000110000:www-data /var/www/html
 RUN chmod 777 /var/www/html
+RUN chown 1000110000:www-data /var/lock/apache2
+RUN chown 1000110000:www-data /var/run/apache2
+RUN chown 1000110000:www-data /var/log/apache2
+RUN chown 1000110000:www-data /etc/logrotate.d/apache2
 
 COPY docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
