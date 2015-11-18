@@ -42,10 +42,9 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			( set -x; ls -A; sleep 10 )
 		fi
 		echo >&2 "Before tar command"
-		sleep 60
-		tar cf - --one-file-system -C /usr/src/wordpress . | tar xf -
-		echo >&2 "After tar command"
-		sleep 60
+		#tar cf - --one-file-system -C /usr/src/wordpress . | tar xf -
+		# Openshift v3 issue : copy source instead of using tar
+		cp -R /usr/src/wordpress/* .
 		echo >&2 "Complete! WordPress has been successfully copied to $(pwd)"
 		if [ ! -e .htaccess ]; then
 			# NOTE: The "Indexes" option is disabled in the php:apache base image
@@ -157,5 +156,5 @@ if (!$mysql->query('CREATE DATABASE IF NOT EXISTS `' . $mysql->real_escape_strin
 $mysql->close();
 EOPHP
 fi
-sleep 300
+
 exec "$@"
