@@ -12,6 +12,7 @@ VOLUME /var/www/html
 VOLUME /var/lock/apache2
 VOLUME /var/run/apache2
 VOLUME /var/log/apache2
+VOLUME /usr/src/wordpress
 
 ENV WORDPRESS_VERSION 4.3.1
 ENV WORDPRESS_SHA1 b2e5652a6d2333cabe7b37459362a3e5b8b66221
@@ -23,28 +24,15 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& rm wordpress.tar.gz \
 	&& chown -R www-data:www-data /usr/src/wordpress
 
-COPY errorlog.log /var/www/html/errorlog.log
-RUN chmod 777 /var/www/html/errorlog.log \
- && sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/ports.conf \
- && sed -i 's/ErrorLog .*/ErrorLog \/var\/www\/html\/errorlog.log/' /etc/apache2/apache2.conf \
- && sed -i 's/CustomLog .*/CustomLog \/var\/www\/html\/errorlog.log combined/' /etc/apache2/apache2.conf \
+COPY apache.log /var/www/html/apache.log
+RUN sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/ports.conf \
+ && sed -i 's/ErrorLog .*/ErrorLog \/var\/www\/html\/apache.log/' /etc/apache2/apache2.conf \
+ && sed -i 's/CustomLog .*/CustomLog \/var\/www\/html\/apache.log combined/' /etc/apache2/apache2.conf \
  && sed -i 's/LogLevel .*/LogLevel info/' /etc/apache2/apache2.conf
-
-#RUN chown 1000110000:www-data /var/www
-#RUN chown 1000110000:www-data /var/www/html
-#RUN chmod 777 /var/www/html
-#RUN chown 1000110000:www-data /var/lock/apache2
-#RUN chown 1000110000:www-data /var/run/apache2
-#RUN chown 1000110000:www-data /var/log/apache2
-#RUN chown 1000110000:www-data /etc/logrotate.d/apache2
 
 COPY docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-EXPOSE 8080
-#RUN useradd -m 1000110000 && echo "1000110000:1000110000" | chpasswd && adduser 1000110000 sudo
-#RUN useradd -G www-data 1000110000
-#RUN useradd -G root 1000110000
-USER 1000110000
+
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
