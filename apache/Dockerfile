@@ -10,6 +10,9 @@ RUN docker-php-ext-install mysqli
 
 VOLUME /var/www/html
 VOLUME /var/lock/apache2
+VOLUME /var/run
+VOLUME /var/run/apache2
+VOLUME /var/log/apache2
 
 ENV WORDPRESS_VERSION 4.3.1
 ENV WORDPRESS_SHA1 b2e5652a6d2333cabe7b37459362a3e5b8b66221
@@ -19,7 +22,7 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
 	&& tar -xzf wordpress.tar.gz -C /usr/src/ \
 	&& rm wordpress.tar.gz \
-	&& chown -R 1000110000:www-data /usr/src/wordpress
+	&& chown -R www-data:www-data /usr/src/wordpress
 
 COPY errorlog.log /var/www/html/errorlog.log
 RUN chmod 777 /var/www/html/errorlog.log \
@@ -28,19 +31,19 @@ RUN chmod 777 /var/www/html/errorlog.log \
  && sed -i 's/CustomLog .*/CustomLog \/var\/www\/html\/errorlog.log combined/' /etc/apache2/apache2.conf \
  && sed -i 's/LogLevel .*/LogLevel info/' /etc/apache2/apache2.conf
 
-RUN chown 1000110000:www-data /var/www
-RUN chown 1000110000:www-data /var/www/html
-RUN chmod 777 /var/www/html
-RUN chown 1000110000:www-data /var/lock/apache2
-RUN chown 1000110000:www-data /var/run/apache2
-RUN chown 1000110000:www-data /var/log/apache2
-RUN chown 1000110000:www-data /etc/logrotate.d/apache2
+#RUN chown 1000110000:www-data /var/www
+#RUN chown 1000110000:www-data /var/www/html
+#RUN chmod 777 /var/www/html
+#RUN chown 1000110000:www-data /var/lock/apache2
+#RUN chown 1000110000:www-data /var/run/apache2
+#RUN chown 1000110000:www-data /var/log/apache2
+#RUN chown 1000110000:www-data /etc/logrotate.d/apache2
 
 COPY docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 EXPOSE 8080
 #RUN useradd -m 1000110000 && echo "1000110000:1000110000" | chpasswd && adduser 1000110000 sudo
-RUN useradd -G www-data 1000110000
+#RUN useradd -G www-data 1000110000
 #RUN useradd -G root 1000110000
 
 # grr, ENTRYPOINT resets CMD now
