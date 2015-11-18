@@ -12,7 +12,6 @@ VOLUME /var/www/html
 VOLUME /var/lock/apache2
 VOLUME /var/run/apache2
 VOLUME /var/log/apache2
-VOLUME /usr/src/wordpress
 
 ENV WORDPRESS_VERSION 4.3.1
 ENV WORDPRESS_SHA1 b2e5652a6d2333cabe7b37459362a3e5b8b66221
