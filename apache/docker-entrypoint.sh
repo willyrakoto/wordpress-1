@@ -39,15 +39,11 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		echo >&2 "WordPress not found in $(pwd) - copying now..."
 		if [ "$(ls -A)" ]; then
 			echo >&2 "WARNING: $(pwd) is not empty - press Ctrl+C now if this is an error!"
-			( set -x; ls -A; sleep 60)
+			( set -x; ls -A; sleep 10 )
 		fi
-		#tar cf - --one-file-system -C /usr/src/wordpress . | tar xf -
-		echo >&2 "Copy files from wordpress to var www html"
-		cp -R /usr/src/wordpress/* .
+		tar cf - --one-file-system -C /usr/src/wordpress . | tar xf -
 		echo >&2 "Complete! WordPress has been successfully copied to $(pwd)"
 		if [ ! -e .htaccess ]; then
-			#echo >&2 "Set rewrite rule in htaccess and pause 20 seconds"
-			#sleep 20
 			# NOTE: The "Indexes" option is disabled in the php:apache base image
 			cat > .htaccess <<-'EOF'
 				# BEGIN WordPress
@@ -62,8 +58,6 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 				# END WordPress
 			EOF
 			chown www-data:www-data .htaccess
-			#echo >&2 "Try to change owner of .htacess and pause 20 seconds"
-			#sleep 20
 		fi
 	fi
 
@@ -76,11 +70,8 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
 	$_SERVER['HTTPS'] = 'on';
 }
-
 EOPHP
 		chown www-data:www-data wp-config.php
-		#echo >&2 "Try to change owner of wp-config.php and pause 20 seconds"
-		#sleep 20
 	fi
 
 	# see http://stackoverflow.com/a/2705678/433558
@@ -140,11 +131,8 @@ EOPHP
 	TERM=dumb php -- "$WORDPRESS_DB_HOST" "$WORDPRESS_DB_USER" "$WORDPRESS_DB_PASSWORD" "$WORDPRESS_DB_NAME" <<'EOPHP'
 <?php
 // database might not exist, so let's try creating it (just to be safe)
-
 $stderr = fopen('php://stderr', 'w');
-
 list($host, $port) = explode(':', $argv[1], 2);
-
 $maxTries = 10;
 do {
 	$mysql = new mysqli($host, $argv[2], $argv[3], '', (int)$port);
@@ -157,16 +145,13 @@ do {
 		sleep(3);
 	}
 } while ($mysql->connect_error);
-
 if (!$mysql->query('CREATE DATABASE IF NOT EXISTS `' . $mysql->real_escape_string($argv[4]) . '`')) {
 	fwrite($stderr, "\n" . 'MySQL "CREATE DATABASE" Error: ' . $mysql->error . "\n");
 	$mysql->close();
 	exit(1);
 }
-
 $mysql->close();
 EOPHP
 fi
-echo >&2 "End of entrypoint"
-sleep 120
+
 exec "$@"
