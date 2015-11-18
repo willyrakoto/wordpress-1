@@ -168,5 +168,5 @@ $mysql->close();
 EOPHP
 fi
 echo >&2 "End of entrypoint"
-sleep 500
+sleep 120
 exec "$@"
