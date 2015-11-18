@@ -36,6 +36,7 @@ RUN sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/
 EXPOSE 8080
 
 COPY docker-entrypoint.sh /entrypoint.sh
+# Openshift v3 Add execution right on EntryPoint
 RUN chmod +x /entrypoint.sh
 
 # grr, ENTRYPOINT resets CMD now
