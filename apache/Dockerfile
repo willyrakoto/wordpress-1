@@ -24,10 +24,11 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& rm wordpress.tar.gz \
 	&& chown -R www-data:www-data /usr/src/wordpress
 
-COPY apache.log /var/www/html/apache.log
+COPY apache.log /var/log/apache2/custom.log
+COPY apache.log /var/log/apache2/error.log
 RUN sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/ports.conf \
- && sed -i 's/ErrorLog .*/ErrorLog \/var\/www\/html\/apache.log/' /etc/apache2/apache2.conf \
- && sed -i 's/CustomLog .*/CustomLog \/var\/www\/html\/apache.log combined/' /etc/apache2/apache2.conf \
+ && sed -i 's/ErrorLog .*/ErrorLog \/var\/log\/apache2\/error.log/' /etc/apache2/apache2.conf \
+ && sed -i 's/CustomLog .*/CustomLog \/var\/log\/apache2\/custom.log combined/' /etc/apache2/apache2.conf \
  && sed -i 's/LogLevel .*/LogLevel info/' /etc/apache2/apache2.conf
 
 COPY docker-entrypoint.sh /entrypoint.sh
