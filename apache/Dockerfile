@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev && rm -rf /var
 RUN docker-php-ext-install mysqli
 
 VOLUME /var/www/html
+VOLUME /var/lock/apache2
 
 ENV WORDPRESS_VERSION 4.3.1
 ENV WORDPRESS_SHA1 b2e5652a6d2333cabe7b37459362a3e5b8b66221
