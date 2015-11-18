@@ -61,7 +61,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 				</IfModule>
 				# END WordPress
 			EOF
-			chown 1000110000:1000110000 .htaccess
+			chown www-data:www-data .htaccess
 			#echo >&2 "Try to change owner of .htacess and pause 20 seconds"
 			#sleep 20
 		fi
@@ -78,7 +78,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 }
 
 EOPHP
-		chown 1000110000:1000110000 wp-config.php
+		chown www-data:www-data wp-config.php
 		#echo >&2 "Try to change owner of wp-config.php and pause 20 seconds"
 		#sleep 20
 	fi
