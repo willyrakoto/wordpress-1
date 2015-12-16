@@ -2,38 +2,28 @@
 set -e
 
 if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
-	if [ -n "$MYSQL_PORT_3306_TCP" ]; then
-		if [ -z "$WORDPRESS_DB_HOST" ]; then
-			WORDPRESS_DB_HOST='mysql'
-		else
-			echo >&2 'warning: both WORDPRESS_DB_HOST and MYSQL_PORT_3306_TCP found'
-			echo >&2 "  Connecting to WORDPRESS_DB_HOST ($WORDPRESS_DB_HOST)"
-			echo >&2 '  instead of the linked mysql container'
-		fi
-	fi
 
+        # Openshift v3 Define WORDPRESS Databases environment variables
+	if [ -z "$MYSQL_SERVICE_HOST" ]; then
+		echo >&2 'warning: $MYSQL_SERVICE_HOST not found, you should have a mysql service in your project'
+	else
+		: ${WORDPRESS_DB_HOST:=$MYSQL_SERVICE_HOST}
+	fi
+	if [ -z "$MYSQL_SERVICE_PORT" ]; then
+		echo >&2 'warning: $MYSQL_SERVICE_PORT not found, you should have a mysql service in your project'
+	else
+		: ${WORDPRESS_DB_PORT:=$MYSQL_SERVICE_PORT}
+	fi
 	if [ -z "$WORDPRESS_DB_HOST" ]; then
-		echo >&2 'error: missing WORDPRESS_DB_HOST and MYSQL_PORT_3306_TCP environment variables'
-		echo >&2 '  Did you forget to --link some_mysql_container:mysql or set an external db'
-		echo >&2 '  with -e WORDPRESS_DB_HOST=hostname:port?'
+		echo >&2 'error: missing WORDPRESS_DB_HOST and WORDPRESS_DB_PORT environment variables'
+		echo >&2 '  Did you forget to add a mysql service to your project?'
 		exit 1
 	fi
 
-	# if we're linked to MySQL and thus have credentials already, let's use them
-	: ${WORDPRESS_DB_USER:=${MYSQL_ENV_MYSQL_USER:-root}}
-	if [ "$WORDPRESS_DB_USER" = 'root' ]; then
-		: ${WORDPRESS_DB_PASSWORD:=$MYSQL_ENV_MYSQL_ROOT_PASSWORD}
-	fi
-	: ${WORDPRESS_DB_PASSWORD:=$MYSQL_ENV_MYSQL_PASSWORD}
-	: ${WORDPRESS_DB_NAME:=${MYSQL_ENV_MYSQL_DATABASE:-wordpress}}
-
-	if [ -z "$WORDPRESS_DB_PASSWORD" ]; then
-		echo >&2 'error: missing required WORDPRESS_DB_PASSWORD environment variable'
-		echo >&2 '  Did you forget to -e WORDPRESS_DB_PASSWORD=... ?'
-		echo >&2
-		echo >&2 '  (Also of interest might be WORDPRESS_DB_USER and WORDPRESS_DB_NAME.)'
-		exit 1
-	fi
+	: ${WORDPRESS_DB_USER:=$MYSQL_USER}
+	: ${WORDPRESS_DB_PASSWORD:=$MYSQL_PASSWORD}
+	: ${WORDPRESS_DB_NAME:=$MYSQL_DATABASE}
+        #End Openshift v3
 
 	if ! [ -e index.php -a -e wp-includes/version.php ]; then
 		echo >&2 "WordPress not found in $(pwd) - copying now..."
