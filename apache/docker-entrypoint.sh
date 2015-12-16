@@ -19,13 +19,13 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		exit 1
 	fi
 
-	# if we're linked to MySQL, and we're using the root user, and our linked
-	# container has a default "root" password set up and passed through... :)
-	: ${WORDPRESS_DB_USER:=root}
+	# if we're linked to MySQL and thus have credentials already, let's use them
+	: ${WORDPRESS_DB_USER:=${MYSQL_ENV_MYSQL_USER:-root}}
 	if [ "$WORDPRESS_DB_USER" = 'root' ]; then
 		: ${WORDPRESS_DB_PASSWORD:=$MYSQL_ENV_MYSQL_ROOT_PASSWORD}
 	fi
-	: ${WORDPRESS_DB_NAME:=wordpress}
+	: ${WORDPRESS_DB_PASSWORD:=$MYSQL_ENV_MYSQL_PASSWORD}
+	: ${WORDPRESS_DB_NAME:=${MYSQL_ENV_MYSQL_DATABASE:-wordpress}}
 
 	if [ -z "$WORDPRESS_DB_PASSWORD" ]; then
 		echo >&2 'error: missing required WORDPRESS_DB_PASSWORD environment variable'
@@ -41,7 +41,6 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			echo >&2 "WARNING: $(pwd) is not empty - press Ctrl+C now if this is an error!"
 			( set -x; ls -A; sleep 10 )
 		fi
-		echo >&2 "Before tar command"
 		#tar cf - --one-file-system -C /usr/src/wordpress . | tar xf -
 		# Openshift v3 issue : copy source instead of using tar
 		cp -R /usr/src/wordpress/* .
@@ -85,16 +84,19 @@ EOPHP
 		echo "$@" | sed 's/[\/&]/\\&/g'
 	}
 	php_escape() {
-		php -r 'var_export((string) $argv[1]);' "$1"
+		php -r 'var_export(('$2') $argv[1]);' "$1"
 	}
 	set_config() {
 		key="$1"
 		value="$2"
-		regex="(['\"])$(sed_escape_lhs "$key")\2\s*,"
+		var_type="${3:-string}"
+		start="(['\"])$(sed_escape_lhs "$key")\2\s*,"
+		end="\);"
 		if [ "${key:0:1}" = '$' ]; then
-			regex="^(\s*)$(sed_escape_lhs "$key")\s*="
+			start="^(\s*)$(sed_escape_lhs "$key")\s*="
+			end=";"
 		fi
-		sed -ri "s/($regex\s*)(['\"]).*\3/\1$(sed_escape_rhs "$(php_escape "$value")")/" wp-config.php
+		sed -ri "s/($start\s*).*($end)$/\1$(sed_escape_rhs "$(php_escape "$value" "$var_type")")\3/" wp-config.php
 	}
 
 	set_config 'DB_HOST' "$WORDPRESS_DB_HOST"
@@ -129,6 +131,10 @@ EOPHP
 
 	if [ "$WORDPRESS_TABLE_PREFIX" ]; then
 		set_config '$table_prefix' "$WORDPRESS_TABLE_PREFIX"
+	fi
+
+	if [ "$WORDPRESS_DEBUG" ]; then
+		set_config 'WP_DEBUG' 1 boolean
 	fi
 
 	TERM=dumb php -- "$WORDPRESS_DB_HOST" "$WORDPRESS_DB_USER" "$WORDPRESS_DB_PASSWORD" "$WORDPRESS_DB_NAME" <<'EOPHP'
