@@ -19,6 +19,7 @@ RUN { \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 VOLUME /var/www/html
+# Openshift v3 : Add 3 volumes to let apache process write on it.
 VOLUME /var/lock/apache2
 VOLUME /var/run/apache2
 VOLUME /var/log/apache2
