@@ -54,7 +54,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 				</IfModule>
 				# END WordPress
 			EOF
-			#chown www-data:www-data .htaccess
+			chown www-data:www-data .htaccess
 		fi
 	fi
 
