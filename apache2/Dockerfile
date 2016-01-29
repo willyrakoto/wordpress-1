@@ -35,11 +35,6 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& rm wordpress.tar.gz \
 	&& chown -R www-data:www-data /usr/src/wordpress
 
-RUN chmod 777 /var/www/html \
- && chmod 777 /var/lock/apache2 \
- && chmod 777 /var/run/apache2 \
- && chmod 777 /var/log/apache2
-	
 # Openshift v3 Add custom logs to avoid Permission Denied on /proc/self/fd/1 or /proc/self/fd/2 
 # Openshift v3 Change default Apache2 listening port to 8080
 COPY apache.log /var/log/apache2/custom.log
@@ -51,10 +46,10 @@ RUN sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/
  
 EXPOSE 8080
 
-RUN chmod -R 777 /var/www/html/* \
- && chmod -R 777 /var/lock/apache2/* \
- && chmod -R 777 /var/run/apache2/* \
- && chmod -R 777 /var/log/apache2/*
+RUN chmod -R 777 /var/www/html \
+ && chmod -R 777 /var/lock/apache2 \
+ && chmod -R 777 /var/run/apache2 \
+ && chmod -R 777 /var/log/apache2
 
 COPY docker-entrypoint.sh /entrypoint.sh
 # Openshift v3 Add execution right on EntryPoint
