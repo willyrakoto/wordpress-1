@@ -51,6 +51,11 @@ RUN sed -e 's/Listen 80/Listen 8080/' -i /etc/apache2/apache2.conf /etc/apache2/
  
 EXPOSE 8080
 
+RUN chmod -R 777 /var/www/html/* \
+ && chmod -R 777 /var/lock/apache2/* \
+ && chmod -R 777 /var/run/apache2/* \
+ && chmod -R 777 /var/log/apache2/*
+
 COPY docker-entrypoint.sh /entrypoint.sh
 # Openshift v3 Add execution right on EntryPoint
 RUN chmod +x /entrypoint.sh
