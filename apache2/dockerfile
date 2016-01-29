@@ -18,7 +18,7 @@ RUN { \
 		echo 'opcache.enable_cli=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-VOLUME /var/www/html
+#VOLUME /var/www/html
 # Openshift v3 : Add 3 volumes to let apache process write on it.
 #VOLUME /var/lock/apache2
 #VOLUME /var/run/apache2
@@ -34,7 +34,8 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& rm wordpress.tar.gz \
 	&& chown -R www-data:www-data /usr/src/wordpress
 
-RUN chmod 777 /var/lock/apache2 \
+RUN chmod 777 /var/www/html
+ && chmod 777 /var/lock/apache2 \
  && chmod 777 /var/run/apache2 \
  && chmod 777 /var/log/apache2
 	
