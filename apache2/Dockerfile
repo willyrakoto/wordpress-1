@@ -35,7 +35,7 @@ RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VER
 	&& rm wordpress.tar.gz \
 	&& chown -R www-data:www-data /usr/src/wordpress
 
-RUN chmod 777 /var/www/html
+RUN chmod 777 /var/www/html \
  && chmod 777 /var/lock/apache2 \
  && chmod 777 /var/run/apache2 \
  && chmod 777 /var/log/apache2
