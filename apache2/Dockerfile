@@ -18,14 +18,15 @@ RUN { \
 		echo 'opcache.enable_cli=1'; \
 	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
+ENV WORDPRESS_VERSION 4.4.1
+ENV WORDPRESS_SHA1 89bcc67a33aecb691e879c818d7e2299701f30e7
+
 #VOLUME /var/www/html
 # Openshift v3 : Add 3 volumes to let apache process write on it.
 #VOLUME /var/lock/apache2
 #VOLUME /var/run/apache2
 #VOLUME /var/log/apache2
 
-ENV WORDPRESS_VERSION 4.4
-ENV WORDPRESS_SHA1 d647a77c63f2ba06578f7747bd4ac295e032f57a
 
 # upstream tarballs include ./wordpress/ so this gives us /usr/src/wordpress
 RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
