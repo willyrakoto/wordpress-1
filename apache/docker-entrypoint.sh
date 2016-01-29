@@ -23,6 +23,11 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 	: ${WORDPRESS_DB_USER:=$MYSQL_USER}
 	: ${WORDPRESS_DB_PASSWORD:=$MYSQL_PASSWORD}
 	: ${WORDPRESS_DB_NAME:=$MYSQL_DATABASE}
+	echo $WORDPRESS_DB_HOST
+	echo $WORDPRESS_DB_PASSWORD
+	echo $WORDPRESS_DB_NAME
+	echo $WORDPRESS_DB_USER
+        echo "Coucou"
         #End Openshift v3
 
 	if ! [ -e index.php -a -e wp-includes/version.php ]; then
