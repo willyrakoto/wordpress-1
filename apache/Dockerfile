@@ -49,6 +49,8 @@ COPY docker-entrypoint.sh /entrypoint.sh
 # Openshift v3 Add execution right on EntryPoint
 RUN chmod +x /entrypoint.sh
 
+USER 1001
+
 # grr, ENTRYPOINT resets CMD now
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
