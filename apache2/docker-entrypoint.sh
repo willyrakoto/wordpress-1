@@ -36,10 +36,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		echo >&2 '  (Also of interest might be WORDPRESS_DB_USER and WORDPRESS_DB_NAME.)'
 		exit 1
 	fi
-	echo $WORDPRESS_DB_HOST
-	echo $WORDPRESS_DB_PASSWORD
-	echo $WORDPRESS_DB_NAME
-	echo $WORDPRESS_DB_USER
+
 	if ! [ -e index.php -a -e wp-includes/version.php ]; then
 		echo >&2 "WordPress not found in $(pwd) - copying now..."
 		if [ "$(ls -A)" ]; then
@@ -148,7 +145,7 @@ EOPHP
 	if [ "$WORDPRESS_DEBUG" ]; then
 		set_config 'WP_DEBUG' 1 boolean
 	fi
-	echo `cat wp-config.php`
+
 	TERM=dumb php -- "$WORDPRESS_DB_HOST" "$WORDPRESS_DB_USER" "$WORDPRESS_DB_PASSWORD" "$WORDPRESS_DB_NAME" <<'EOPHP'
 <?php
 // database might not exist, so let's try creating it (just to be safe)
