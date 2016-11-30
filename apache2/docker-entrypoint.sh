@@ -55,7 +55,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 				# END WordPress
 			EOF
 			
-			#www-data:www-data .htaccess
+			chmod 1001:root .htaccess
 		fi
 	fi
 
@@ -69,7 +69,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 	$_SERVER['HTTPS'] = 'on';
 }
 EOPHP
-		#chown www-data:www-data wp-config.php
+		chmod 1001:root wp-config.php
 	fi
 
 	# see http://stackoverflow.com/a/2705678/433558
