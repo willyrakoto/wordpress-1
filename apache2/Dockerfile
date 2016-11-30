@@ -55,8 +55,6 @@ RUN chmod -R 777 /var/www/html \
  && chmod -R 777 /var/log/apache2
 
 COPY docker-entrypoint.sh /entrypoint.sh
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
 
 # Openshift v3 Add execution right on EntryPoint
 RUN chmod +x /entrypoint.sh
